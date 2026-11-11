@@ -1,0 +1,76 @@
+@import "tailwindcss";
+@import "@fontsource-variable/atkinson-hyperlegible-next";
+@import "@fontsource-variable/atkinson-hyperlegible-next/wght-italic.css";
+
+/*
+  Design notes
+  - One typeface: Atkinson Hyperlegible Next, made by the Braille Institute for low-vision readers.
+    Hierarchy comes from size and weight (400 body, 700 headings, 800 display), never all caps.
+  - Ultramarine is used for one meaning only: "current, or mine". It shows up as the bar beside the
+    current page in the nav, the bar beside the steps I built in a diagram, and link underlines.
+  - Highlighter yellow is for help and notes: the homepage guide, and preview-only reminders.
+  - Type scale follows the classic 12/14/18/21/24/36/48/60/72 sequence.
+*/
+@theme {
+  --font-sans: "Atkinson Hyperlegible Next Variable", "Atkinson Hyperlegible", system-ui, sans-serif;
+
+  --color-paper: #fcfcfa;
+  --color-wash: #eff1f5;
+  --color-ink: #1c1f2a;
+  --color-muted: #5a6072;
+  --color-rule: #d9dce4;
+  --color-accent: #2f3fb4;
+  --color-note: #ffe68a;
+
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-body: 1.125rem;
+  --text-body--line-height: 1.65;
+  --text-lead: 1.3125rem;
+  --text-lead--line-height: 1.55;
+  --text-h3: 1.5rem;
+  --text-h3--line-height: 1.25;
+  --text-h2: 2.25rem;
+  --text-h2--line-height: 1.12;
+  --text-h1: 3rem;
+  --text-h1--line-height: 1.06;
+  --text-display: 3.75rem;
+  --text-display--line-height: 1.02;
+  --text-display-lg: 4.5rem;
+  --text-display-lg--line-height: 1;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-paper text-body text-ink font-sans antialiased;
+  }
+  h1, h2, h3 { text-wrap: balance; }
+  p, li { text-wrap: pretty; }
+  ::selection { @apply bg-note text-ink; }
+  :focus-visible { @apply rounded-[2px] outline-2 outline-offset-4 outline-accent; }
+}
+
+/* Text link: ink text, ultramarine underline that thickens on hover. */
+@utility link {
+  @apply underline decoration-accent/45 decoration-[1.5px] underline-offset-[0.22em] hover:decoration-accent hover:decoration-[2.5px];
+}
+
+/* The JupyterLab-style bar that marks "current, or mine". Callers set their own left padding. */
+@utility bar {
+  box-shadow: inset 4px 0 0 var(--color-accent);
+}
+
+/* The one animation on the site: help appearing under the choice someone just made. */
+@keyframes unfold {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+@utility unfold {
+  animation: unfold 0.28s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

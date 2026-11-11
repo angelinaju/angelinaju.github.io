@@ -1,0 +1,7 @@
+node_modules
+dist
+.DS_Store
+
+# Not for the public repo: images awaiting permission, and the private research portfolio.
+drafts/
+private/
