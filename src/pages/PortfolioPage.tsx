@@ -1,12 +1,15 @@
+import type { ReactNode } from 'react'
 import { Page, PageIntro, Note, GUTTER } from '../components/Layout'
 
 // Yellow note marking something you still need to add. Preview only. Delete each one once filled in.
-function Todo({ children }) {
+function Todo({ children }: { children: ReactNode }) {
   return <Note>To add: {children}</Note>
 }
 
 // Role, dates, and place sit in the margin column, beside the story.
-function Facts({ items }) {
+type Fact = [label: string, value: string]
+
+function Facts({ items }: { items: Fact[] }) {
   return (
     <dl className="mb-8 grid grid-cols-2 gap-x-6 gap-y-4 text-[1rem] md:sticky md:top-8 md:mb-0 md:grid-cols-1 md:self-start md:pt-1.5">
       {items.map(([k, v]) => (
@@ -19,7 +22,15 @@ function Facts({ items }) {
   )
 }
 
-function CaseStudy({ id, title, summary, facts, children }) {
+interface CaseStudyProps {
+  id: string
+  title: string
+  summary: string
+  facts: Fact[]
+  children: ReactNode
+}
+
+function CaseStudy({ id, title, summary, facts, children }: CaseStudyProps) {
   return (
     <article id={id} className="scroll-mt-8 border-t border-rule py-14 sm:py-20">
       <h2 className="max-w-[22ch] text-h2 font-extrabold tracking-[-0.02em]">{title}</h2>
@@ -35,7 +46,12 @@ function CaseStudy({ id, title, summary, facts, children }) {
 }
 
 // Simplified PegasusAI request flow. `mine` marks the steps Angelina built.
-export const pegasusFlow = [
+interface FlowGroup {
+  where: string
+  steps: [text: string, mine: boolean][]
+}
+
+export const pegasusFlow: FlowGroup[] = [
   {
     where: 'In the notebook',
     steps: [
@@ -61,7 +77,7 @@ export const pegasusFlow = [
   },
 ]
 
-export function FlowDiagram({ groups }) {
+export function FlowDiagram({ groups }: { groups: FlowGroup[] }) {
   let n = 0
   return (
     <figure className="my-10 rounded-md bg-wash p-3 sm:p-4">
@@ -103,7 +119,7 @@ export function FlowDiagram({ groups }) {
 // copies, and this frame only renders in local preview. Once you're cleared to share one: move its files to
 // /public, update the paths where it’s used, swap <PreviewOnly> for a plain <figure>, and delete that
 // component’s `import.meta.env.DEV` line. (The check sits in each component so the build drops the paths.)
-function PreviewOnly({ children }) {
+function PreviewOnly({ children }: { children: ReactNode }) {
   if (!import.meta.env.DEV) return null
   return (
     <figure className="my-10 space-y-4 rounded-md bg-note p-3 sm:p-4">

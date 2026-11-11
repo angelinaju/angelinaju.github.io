@@ -1,7 +1,8 @@
+import type { ReactNode } from 'react'
 import { Page, ProfilePhoto, StatusPill, Downloads, GUTTER } from '../components/Layout'
 import { about } from '../content'
 
-function Block({ title, children }) {
+function Block({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className={`border-t border-rule py-12 sm:py-14 ${GUTTER}`}>
       <h2 className="mb-6 text-h3 font-bold tracking-tight md:mb-0">{title}</h2>

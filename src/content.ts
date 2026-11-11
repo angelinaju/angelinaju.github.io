@@ -6,7 +6,70 @@
 // empty, a dashed reminder box shows in local preview only, never on the live site.
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const links = {
+// ── Shapes of the content below. TypeScript checks every entry against these, so a missing
+//    field or a typo in a key shows up as an error before the site builds.
+export type LinkPair = [label: string, href: string]
+
+export interface Role {
+  id: string
+  org: string
+  role: string
+  team?: string
+  location: string
+  date: string
+  summary: string
+  points: string[]
+  tags?: string[]
+  links?: { label: string; href: string }[]
+}
+
+export interface Path {
+  id: string
+  label: string
+  help: string
+  links: LinkPair[]
+}
+
+export interface SelectedItem {
+  title: string
+  context: string
+  kind: 'Product' | 'Research'
+  year: string
+  href: string
+}
+
+export interface Poster {
+  title: string
+  venue: string
+  date: string
+  note?: string
+}
+
+export interface Project {
+  name: string
+  date: string
+  stack: string
+  metric: string
+  metricLabel: string
+  blurb: string
+  github: string | null
+}
+
+export interface Leadership {
+  role: string
+  org: string
+  date: string
+  points: string[]
+}
+
+
+export const links: {
+  email: string
+  linkedin: string
+  github: string
+  cv: string | null
+  resume: string | null
+} = {
   email: 'aju@vols.utk.edu',
   linkedin: 'https://www.linkedin.com/in/angelinaju',
   github: 'https://github.com/angelinaju',
@@ -17,11 +80,11 @@ export const links = {
 }
 
 // To show your photo: put a square image in /public (e.g. profile.jpg) and set this to '/profile.jpg'.
-export const photo = null
+export const photo: string | null = null
 
 export const status = 'Looking for full-time PM roles (2027)'
 
-export const home = {
+export const home: { statement: string; sub: string; paths: Path[]; selected: SelectedItem[] } = {
   // The big headline. Change it to whatever sounds most like you.
   statement: 'I work on AI tools, and on the people who have to use them.',
   sub: 'Hi, I’m Angelina, a computer science senior at the University of Tennessee. This summer I was a product management intern at St. Jude. During the school year I work in a lab on PegasusAI, an AI assistant for a data engineering class. I graduate in May 2027.',
@@ -65,7 +128,7 @@ export const home = {
   ],
 }
 
-export const work = {
+export const work: { lead: string; roles: Role[] } = {
   lead: 'Two internships and a student org. Most of it has been product work on software for people who aren’t engineers.',
   roles: [
     {
@@ -121,7 +184,7 @@ export const work = {
   ],
 }
 
-export const research = {
+export const research: { lead: string; roles: Role[]; posters: Poster[] } = {
   lead: 'I’ve worked in two labs at UTK. One runs an AI assistant in a data engineering class. The other looked at whether robot dogs could help older adults with dementia.',
   roles: [
     {
@@ -172,7 +235,7 @@ export const research = {
   ],
 }
 
-export const projects = {
+export const projects: { lead: string; list: Project[] } = {
   lead: 'Some projects from classes and teams I’ve been on.',
   list: [
     {
@@ -208,7 +271,13 @@ export const projects = {
   ],
 }
 
-export const about = {
+export const about: {
+  bio: string[]
+  education: { school: string; degree: string; date: string; gpa: string; coursework: string[] }
+  honors: [name: string, years: string][]
+  leadership: Leadership[]
+  skills: [group: string, items: string][]
+} = {
   // Replace with your own words whenever you're ready.
   bio: [
     'I’m a senior studying computer science at the University of Tennessee, and I graduate in May 2027.',
