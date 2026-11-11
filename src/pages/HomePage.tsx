@@ -5,7 +5,7 @@ import { home } from '../content'
 // "What brings you here?" Visitors pick who they are, and a short guide to the site appears right under
 // their choice, the same way PegasusAI's help appears under the notebook cell a student is working in.
 function Guide() {
-  const [picked, setPicked] = useState(null)
+  const [picked, setPicked] = useState<string | null>(null)
   const path = home.paths.find((p) => p.id === picked)
   return (
     <div className="mt-12 max-w-[44rem] lg:mt-3">

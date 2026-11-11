@@ -1,7 +1,10 @@
-import { useState } from 'react'
-import { links, status, photo } from '../content'
+import { useState, type ReactNode } from 'react'
+import { links, status, photo, type Role } from '../content'
 
-export const NAV = [
+// Which nav item is marked as the current page. 'home' marks none.
+export type PageKey = 'home' | 'case-studies' | 'work' | 'research' | 'projects' | 'about'
+
+export const NAV: [key: PageKey, label: string, href: string][] = [
   ['case-studies', 'Case studies', '/case-studies/'],
   ['work', 'Work', '/work/'],
   ['research', 'Research', '/research/'],
@@ -13,7 +16,7 @@ export const NAV = [
 const WRAP = 'mx-auto max-w-[68rem] px-5 sm:px-10'
 export const GUTTER = 'md:grid md:grid-cols-[11rem_minmax(0,38rem)] md:gap-x-14'
 
-export function Header({ current }) {
+export function Header({ current }: { current: PageKey }) {
   return (
     <header className={`${WRAP} flex flex-wrap items-center justify-between gap-x-8 gap-y-3 py-6 sm:py-8`}>
       <a href="/" className="text-body font-bold tracking-tight">
@@ -97,7 +100,7 @@ export function Footer() {
 }
 
 // Page title and short intro, at the top of each inner page.
-export function PageIntro({ title, lead }) {
+export function PageIntro({ title, lead }: { title: string; lead?: string }) {
   return (
     <section className="pt-8 pb-14 sm:pt-14 sm:pb-20">
       <h1 className="max-w-[20ch] text-h1 font-extrabold tracking-[-0.025em] sm:text-display">{title}</h1>
@@ -107,13 +110,13 @@ export function PageIntro({ title, lead }) {
 }
 
 // Yellow note for things you still need to add. Shows in local preview only, never on the live site.
-export function Note({ children }) {
+export function Note({ children }: { children: ReactNode }) {
   if (!import.meta.env.DEV) return null
   return <div className="my-5 rounded-md bg-note px-4 py-3 text-small">{children}</div>
 }
 
 // Your own short description of a role. While empty, a reminder shows in local preview only.
-export function Summary({ text }) {
+export function Summary({ text }: { text: string }) {
   if (text) return <p className="text-lead">{text}</p>
   return (
     <Note>
@@ -123,13 +126,13 @@ export function Summary({ text }) {
   )
 }
 
-export function Tags({ items }) {
+export function Tags({ items }: { items?: string[] }) {
   if (!items?.length) return null
   return <p className="text-small text-muted">Skills used: {items.join(', ')}</p>
 }
 
 // One job or research role: dates in the margin column, the story on the right.
-export function RoleBlock({ r }) {
+export function RoleBlock({ r }: { r: Role }) {
   return (
     <article id={r.id} className={`scroll-mt-8 border-t border-rule py-12 sm:py-14 ${GUTTER}`}>
       <p className="mb-4 text-[1rem] md:mb-0 md:pt-1.5">
@@ -150,7 +153,7 @@ export function RoleBlock({ r }) {
             <li key={p} className="pl-1">{p}</li>
           ))}
         </ul>
-        {r.links?.length > 0 && (
+        {r.links && r.links.length > 0 && (
           <p className="mt-6 flex flex-wrap gap-x-6 gap-y-1">
             {r.links.map((l) => (
               <a key={l.href} className="link font-bold" href={l.href}>
@@ -167,7 +170,7 @@ export function RoleBlock({ r }) {
   )
 }
 
-export function ProfilePhoto({ className = '' }) {
+export function ProfilePhoto({ className = '' }: { className?: string }) {
   if (photo) return <img src={photo} alt="Angelina Ju" className={`rounded-md object-cover ${className}`} />
   if (!import.meta.env.DEV) return null
   return (
@@ -179,10 +182,9 @@ export function ProfilePhoto({ className = '' }) {
 
 // Download buttons for the CV and resume. Only shows the ones that are set in content.js.
 export function Downloads() {
-  const files = [
-    [links.resume, 'Download resume'],
-    [links.cv, 'Download CV'],
-  ].filter(([href]) => href)
+  const files: [href: string, label: string][] = []
+  if (links.resume) files.push([links.resume, 'Download resume'])
+  if (links.cv) files.push([links.cv, 'Download CV'])
   if (!files.length) return null
   return (
     <div className="flex flex-wrap gap-3">
@@ -202,7 +204,7 @@ export function Downloads() {
   )
 }
 
-export function Page({ current, children }) {
+export function Page({ current, children }: { current: PageKey; children: ReactNode }) {
   return (
     <>
       <a
