@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Page, PageIntro, Note, GUTTER } from '../components/Layout'
+import { Page, PageIntro, Note, IndexList, ROW, LEFT, MID } from '../components/Layout'
 
 // Yellow note marking something you still need to add. Preview only. Delete each one once filled in.
 function Todo({ children }: { children: ReactNode }) {
@@ -11,11 +11,11 @@ type Fact = [label: string, value: string]
 
 function Facts({ items }: { items: Fact[] }) {
   return (
-    <dl className="mb-8 grid grid-cols-2 gap-x-6 gap-y-4 text-[1rem] md:sticky md:top-8 md:mb-0 md:grid-cols-1 md:self-start md:pt-1.5">
+    <dl className={`${LEFT} mb-10 grid grid-cols-2 gap-x-6 gap-y-4 text-small md:sticky md:top-8 md:mb-0 md:grid-cols-1 md:self-start`}>
       {items.map(([k, v]) => (
         <div key={k}>
-          <dt className="text-muted">{k}</dt>
-          <dd className="font-bold">{v}</dd>
+          <dt className="text-dim">{k}</dt>
+          <dd className="font-medium">{v}</dd>
         </div>
       ))}
     </dl>
@@ -32,12 +32,14 @@ interface CaseStudyProps {
 
 function CaseStudy({ id, title, summary, facts, children }: CaseStudyProps) {
   return (
-    <article id={id} className="scroll-mt-8 border-t border-rule py-14 sm:py-20">
-      <h2 className="max-w-[22ch] text-h2 font-extrabold tracking-[-0.02em]">{title}</h2>
-      <p className="mt-5 max-w-[40rem] text-lead text-muted">{summary}</p>
-      <div className={`mt-10 ${GUTTER}`}>
+    <article id={id} className="scroll-mt-8 border-t border-fg/25 pt-5 pb-20 sm:pb-28">
+      <h2 className="tight max-w-[20ch] text-h1 sm:text-[4.5rem] sm:leading-[0.98]">{title}</h2>
+      <div className={`mt-12 sm:mt-16 ${ROW}`}>
         <Facts items={facts} />
-        <div className="space-y-4 [&_h3]:mt-12 [&_h3]:mb-3 [&_h3]:text-h3 [&_h3]:font-bold [&_h3]:tracking-tight [&>h3:first-child]:mt-0">
+        <div
+          className={`${MID} space-y-4 [&_h3]:tight [&_h3]:mt-14 [&_h3]:mb-4 [&_h3]:text-h3 [&>h3:first-child]:mt-0`}
+        >
+          <p className="mb-10 text-lead">{summary}</p>
           {children}
         </div>
       </div>
@@ -80,19 +82,19 @@ export const pegasusFlow: FlowGroup[] = [
 export function FlowDiagram({ groups }: { groups: FlowGroup[] }) {
   let n = 0
   return (
-    <figure className="my-10 rounded-md bg-wash p-3 sm:p-4">
+    <figure id="pegasus-flow" className="scroll-mt-8 my-12 border-t border-b border-fg/25 py-5">
       <ol className="space-y-4">
         {groups.map((g) => (
           <li key={g.where}>
-            <p className="px-3 pt-1 pb-1.5 text-[1rem] font-bold">{g.where}</p>
+            <p className="pb-2 text-small font-medium">{g.where}</p>
             <ol className="space-y-1">
               {g.steps.map(([text, mine]) => {
                 n += 1
                 return (
                   <li
                     key={text}
-                    className={`grid grid-cols-[1.75rem_1fr] rounded-[3px] py-2 pr-3 pl-3 text-[1rem] leading-snug ${
-                      mine ? 'bar bg-paper font-bold' : 'text-muted'
+                    className={`grid grid-cols-[1.75rem_1fr] px-3 py-2 leading-snug ${
+                      mine ? 'bg-fg font-medium text-ground' : 'text-dim'
                     }`}
                   >
                     <span className="tabular-nums">{n}</span>
@@ -107,8 +109,8 @@ export function FlowDiagram({ groups }: { groups: FlowGroup[] }) {
           </li>
         ))}
       </ol>
-      <figcaption className="mt-4 px-3 pb-1 text-small text-muted">
-        What happens when a student asks for help. The steps with a blue bar are the parts I built. I documented the
+      <figcaption className="mt-5 text-small text-dim">
+        What happens when a student asks for help. The filled-in steps are the parts I built. I documented the
         rest of the flow.
       </figcaption>
     </figure>
@@ -122,8 +124,8 @@ export function FlowDiagram({ groups }: { groups: FlowGroup[] }) {
 function PreviewOnly({ children }: { children: ReactNode }) {
   if (!import.meta.env.DEV) return null
   return (
-    <figure className="my-10 space-y-4 rounded-md bg-note p-3 sm:p-4">
-      <p className="text-small font-bold">Preview only. Not on the live site until you get permission to share.</p>
+    <figure className="my-12 space-y-4 bg-note p-3 text-black sm:p-4">
+      <p className="text-small font-medium">Preview only. Not on the live site until you get permission to share.</p>
       {children}
     </figure>
   )
@@ -133,9 +135,9 @@ function PreviewOnlyScreenshots() {
   if (!import.meta.env.DEV) return null
   return (
     <PreviewOnly>
-      <img src="/drafts/pegasus/help-button.png" alt="A notebook cell that divides by zero, with the PegasusAI help button in its toolbar" className="w-full rounded-[3px]" />
-      <img src="/drafts/pegasus/response.png" alt="The ZeroDivisionError traceback, with PegasusAI’s explanation and suggested fix shown directly under the cell" className="w-full rounded-[3px]" />
-      <figcaption className="text-small text-muted">
+      <img src="/drafts/pegasus/help-button.png" alt="A notebook cell that divides by zero, with the PegasusAI help button in its toolbar" className="w-full" />
+      <img src="/drafts/pegasus/response.png" alt="The ZeroDivisionError traceback, with PegasusAI’s explanation and suggested fix shown directly under the cell" className="w-full" />
+      <figcaption className="text-small">
         A student hits a ZeroDivisionError and clicks the help button. The explanation appears right under their
         cell.
       </figcaption>
@@ -151,10 +153,10 @@ function PreviewOnlyPoster() {
         <img
           src="/drafts/robot/poster.png"
           alt="Research poster: Walking the Dog: Promoting Mobility and Emotional Support through Assistive Quadrupedal Robots for Dementia Care"
-          className="w-full rounded-[3px]"
+          className="w-full"
         />
       </a>
-      <figcaption className="text-small text-muted">
+      <figcaption className="text-small">
         My first-author poster, presented at EUReCA 2025.{' '}
         <a className="link" href="/drafts/robot/poster.pdf" target="_blank" rel="noreferrer">
           Open the full PDF
@@ -169,15 +171,19 @@ export default function Portfolio() {
     <Page current="case-studies">
         <PageIntro
           title="Case studies"
+          count={3}
           lead="Thanks for taking a look. These are longer write-ups than fit on a resume: what the problem was, what I did, and what I learned."
         />
-        <nav aria-label="Case studies" className="-mt-8 mb-16 sm:-mt-12">
-          <ul className="space-y-1.5">
-            <li><a className="link font-bold" href="#aria-guide">ARIA Guide: user guides for a global pediatric oncology platform</a></li>
-            <li><a className="link font-bold" href="#pegasus">PegasusAI: an AI assistant inside the notebook</a></li>
-            <li><a className="link font-bold" href="#robot">Robot companions for dementia care</a></li>
-          </ul>
-        </nav>
+        <div className="mb-24">
+          <IndexList
+            label="Case studies"
+            items={[
+              { href: '#aria-guide', title: 'ARIA Guide user guides', context: 'St. Jude Children’s Research Hospital', left: 'Product', right: '2026' },
+              { href: '#pegasus', title: 'PegasusAI, help inside the notebook', context: 'Global Computing Lab & EPIC Lab, UTK', left: 'Research', right: '2025–' },
+              { href: '#robot', title: 'Robot companions for dementia care', context: 'Zhao Robotics Lab & EPIC Lab, UTK', left: 'Research', right: '2024–25' },
+            ]}
+          />
+        </div>
 
         <CaseStudy
           id="aria-guide"
@@ -262,7 +268,7 @@ export default function Portfolio() {
             write a question or paste in their code: the context goes along automatically. Putting the response
             directly under the cell kept the student’s eyes on their own work instead of in a separate panel.
           </p>
-          <p className="text-small text-muted">
+          <p className="text-small text-dim">
             An early prototype of the extension is on GitHub:{' '}
             <a className="link" href="https://github.com/angelinaju/jupyterlab-extension-vscode">
               jupyterlab-extension-vscode
@@ -302,16 +308,16 @@ export default function Portfolio() {
           </p>
           <ul className="space-y-6">
             <li>
-              <p className="font-bold">How much detail should an AI assistant give a student?</p>
-              <p className="mt-1 text-muted">
+              <p className="font-medium">How much detail should an AI assistant give a student?</p>
+              <p className="mt-1 text-dim">
                 Our goal was to help students work toward an answer, but a complete fix is often the easiest thing for
                 a model to give. A hint, a guiding question, and a full solution each trade getting unstuck now
                 against learning for next time. I want to understand when each one actually helps.
               </p>
             </li>
             <li>
-              <p className="font-bold">What signs show that a student is becoming over-reliant on an AI assistant?</p>
-              <p className="mt-1 text-muted">
+              <p className="font-medium">What signs show that a student is becoming over-reliant on an AI assistant?</p>
+              <p className="mt-1 text-dim">
                 When help is one click away, it’s easy to reach for it before trying. Patterns in the interaction data,
                 like how quickly students ask after an error or how often they ask about the same problem, might show
                 when reliance stops being useful. The interface could then respond, for example by asking what the
@@ -319,10 +325,10 @@ export default function Portfolio() {
               </p>
             </li>
             <li>
-              <p className="font-bold">
+              <p className="font-medium">
                 How should an AI assistant differ based on who’s using it: students, scientists, or programmers?
               </p>
-              <p className="mt-1 text-muted">
+              <p className="mt-1 text-dim">
                 We started with students before bringing PegasusAI to scientists, and the two groups need different
                 things. A student needs to learn, a scientist wants accurate answers about their workflow, and an
                 experienced programmer may just want speed. The same assistant probably shouldn’t behave the same way
@@ -366,7 +372,7 @@ export default function Portfolio() {
             reacting to it. Participants would be recruited through Knoxville’s CAC Office on Aging and O’Connor
             Senior Center. Since most people had never seen a robot like this, the session builds up to it:
           </p>
-          <ol className="list-decimal space-y-1 pl-6 marker:text-muted">
+          <ol className="list-decimal space-y-1 pl-6 marker:text-dim">
             <li>An introduction and a short demographic survey</li>
             <li>A video demonstration of the robot</li>
             <li>An opinion survey on the robot</li>

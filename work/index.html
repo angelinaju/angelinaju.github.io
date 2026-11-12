@@ -2,6 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#b4b3ab" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+    <script>
+      try { const t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') { document.documentElement.dataset.theme = t; document.querySelectorAll('meta[name="theme-color"]').forEach((m) => m.setAttribute('content', t === 'dark' ? '#000000' : '#b4b3ab')) } } catch {}
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Work · Angelina Ju</title>
     <meta name="description" content="Product management and engineering work by Angelina Ju." />

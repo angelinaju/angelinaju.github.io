@@ -1,73 +1,228 @@
 @import "tailwindcss";
-@import "@fontsource-variable/atkinson-hyperlegible-next";
-@import "@fontsource-variable/atkinson-hyperlegible-next/wght-italic.css";
+@import "@fontsource-variable/host-grotesk";
+@import "@fontsource-variable/host-grotesk/wght-italic.css";
 
 /*
-  Design notes
-  - One typeface: Atkinson Hyperlegible Next, made by the Braille Institute for low-vision readers.
-    Hierarchy comes from size and weight (400 body, 700 headings, 800 display), never all caps.
-  - Ultramarine is used for one meaning only: "current, or mine". It shows up as the bar beside the
-    current page in the nav, the bar beside the steps I built in a diagram, and link underlines.
-  - Highlighter yellow is for help and notes: the homepage guide, and preview-only reminders.
-  - Type scale follows the classic 12/14/18/21/24/36/48/60/72 sequence.
+  Design notes (Nov 2026, second pass, after the Creative Reference Library site)
+  - One typeface: Host Grotesk, a neo-grotesk. Medium (500) for headings, regular for reading.
+    Personality comes from scale contrast: 14px navigation and labels beside very large titles.
+  - Two grounds, no accent color: stone and black. Pages follow the browser's light or dark setting
+    (stone in light, black in dark), and the footer always uses the other ground (data-tone="inverse").
+    Components only use fg / dim / ground, so nothing needs a dark: variant.
+  - "Current, or mine" is shown by inversion (a filled chip) or by full brightness while everything
+    else is dimmed. Never by color.
+  - Parentheses hold counts and years: "(3)", "(2027)".
+  - Highlighter yellow is only for notes that show in local preview.
+  - Photos, when there are any, are prints: a white border and a slight tilt.
+  - Motion: one load moment per page (the headline rises line by line) and underlines that draw
+    themselves when pointed at. Nothing else moves on its own. Reduced motion turns both off.
 */
 @theme {
-  --font-sans: "Atkinson Hyperlegible Next Variable", "Atkinson Hyperlegible", system-ui, sans-serif;
+  --font-sans: "Host Grotesk Variable", "Helvetica Neue", Arial, sans-serif;
 
-  --color-paper: #fcfcfa;
-  --color-wash: #eff1f5;
-  --color-ink: #1c1f2a;
-  --color-muted: #5a6072;
-  --color-rule: #d9dce4;
-  --color-accent: #2f3fb4;
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-stone: #b4b3ab;
   --color-note: #ffe68a;
 
   --text-small: 0.875rem;
-  --text-small--line-height: 1.5;
-  --text-body: 1.125rem;
-  --text-body--line-height: 1.65;
+  --text-small--line-height: 1.35;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.55;
   --text-lead: 1.3125rem;
-  --text-lead--line-height: 1.55;
+  --text-lead--line-height: 1.4;
   --text-h3: 1.5rem;
-  --text-h3--line-height: 1.25;
+  --text-h3--line-height: 1.15;
   --text-h2: 2.25rem;
-  --text-h2--line-height: 1.12;
+  --text-h2--line-height: 1.05;
   --text-h1: 3rem;
-  --text-h1--line-height: 1.06;
-  --text-display: 3.75rem;
-  --text-display--line-height: 1.02;
-  --text-display-lg: 4.5rem;
-  --text-display-lg--line-height: 1;
+  --text-h1--line-height: 1;
+  --text-giant: clamp(3rem, 8.4vw, 8.5rem);
+  --text-giant--line-height: 0.94;
+}
+
+/* Tone-aware colors. Set data-tone on any wrapper to flip everything inside it. */
+@theme inline {
+  --color-fg: var(--fg);
+  --color-dim: var(--dim);
+  --color-ground: var(--ground);
 }
 
 @layer base {
+  /* Light and dark follow the visitor's browser setting unless they pick one with the header toggle,
+     which sets data-theme on <html>. The footer always takes the other one. */
+  :root {
+    color-scheme: light dark;
+    --light-ground: var(--color-stone);
+    --light-fg: var(--color-black);
+    --light-dim: #43423d;
+    --dark-ground: var(--color-black);
+    --dark-fg: #f2f1ec;
+    --dark-dim: #8f8e88;
+
+    --ground: var(--light-ground);
+    --fg: var(--light-fg);
+    --dim: var(--light-dim);
+    --inverse-ground: var(--dark-ground);
+    --inverse-fg: var(--dark-fg);
+    --inverse-dim: var(--dark-dim);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: var(--dark-ground);
+      --fg: var(--dark-fg);
+      --dim: var(--dark-dim);
+      --inverse-ground: var(--light-ground);
+      --inverse-fg: var(--light-fg);
+      --inverse-dim: var(--light-dim);
+    }
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: var(--dark-ground);
+    --fg: var(--dark-fg);
+    --dim: var(--dark-dim);
+    --inverse-ground: var(--light-ground);
+    --inverse-fg: var(--light-fg);
+    --inverse-dim: var(--light-dim);
+  }
+  [data-tone="inverse"] {
+    --ground: var(--inverse-ground);
+    --fg: var(--inverse-fg);
+    --dim: var(--inverse-dim);
+    background-color: var(--ground);
+    color: var(--fg);
+  }
+
   html { scroll-behavior: smooth; }
   body {
-    @apply bg-paper text-body text-ink font-sans antialiased;
+    @apply bg-ground text-body text-fg font-sans antialiased;
+    letter-spacing: -0.006em;
   }
-  h1, h2, h3 { text-wrap: balance; }
+  h1, h2, h3 { text-wrap: balance; font-weight: 500; }
   p, li { text-wrap: pretty; }
-  ::selection { @apply bg-note text-ink; }
-  :focus-visible { @apply rounded-[2px] outline-2 outline-offset-4 outline-accent; }
+  ::selection { background: var(--fg); color: var(--ground); }
+  :focus-visible { @apply outline-2 outline-offset-4 outline-fg; }
 }
 
-/* Text link: ink text, ultramarine underline that thickens on hover. */
-@utility link {
-  @apply underline decoration-accent/45 decoration-[1.5px] underline-offset-[0.22em] hover:decoration-accent hover:decoration-[2.5px];
+/*
+  Underlines are drawn with a background line so they can move.
+  .link: always underlined; on hover the line pulls away to the right and draws back in from the left.
+  .link-hover: no line at rest; on hover it draws in from the left (nav, big email, index-like links).
+  --line sets the thickness.
+*/
+@layer components {
+  .link,
+  .link-hover {
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 100% var(--line, 1px);
+    padding-bottom: 0.08em;
+  }
+  .link:hover {
+    animation: redraw 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .link-hover {
+    background-size: 0% var(--line, 1px);
+    transition: background-size 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .link-hover:hover,
+  .link-hover[aria-current="page"] {
+    background-size: 100% var(--line, 1px);
+  }
+}
+@keyframes redraw {
+  0%     { background-size: 100% var(--line, 1px); background-position: 100% 100%; }
+  45%    { background-size: 0% var(--line, 1px);   background-position: 100% 100%; }
+  45.01% { background-size: 0% var(--line, 1px);   background-position: 0 100%; }
+  100%   { background-size: 100% var(--line, 1px); background-position: 0 100%; }
 }
 
-/* The JupyterLab-style bar that marks "current, or mine". Callers set their own left padding. */
-@utility bar {
-  box-shadow: inset 4px 0 0 var(--color-accent);
+/* Headline reveal (RevealText.tsx): each word sits in a clipping box; lines rise in turn. */
+@layer components {
+  .reveal-word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    /* room for descenders, given back so the line spacing doesn't change */
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+  }
+  .reveal-inner {
+    display: inline-block;
+    animation: rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(var(--reveal-delay, 0ms) + var(--line, 0) * 110ms);
+  }
+  .reveal:not(.is-ready) .reveal-inner {
+    animation-play-state: paused;
+  }
+}
+/* Header menu (NavMenu.tsx). Phones: links drop down. sm and up: links open leftward from the button,
+   the nearest link first. */
+@layer components {
+  .nav-panel {
+    visibility: hidden;
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 0.45s cubic-bezier(0.65, 0, 0.35, 1), visibility 0s linear 0.45s;
+  }
+  .nav-panel[data-open="true"] {
+    visibility: visible;
+    clip-path: inset(0 0 -2px 0);
+    transition: clip-path 0.5s cubic-bezier(0.65, 0, 0.35, 1), visibility 0s;
+  }
+  .nav-panel > li {
+    opacity: 0;
+    transform: translateY(-0.4rem);
+    transition: opacity 0.25s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .nav-panel[data-open="true"] > li {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--i) * 35ms);
+  }
+  @media (width >= 40rem) {
+    .nav-panel { clip-path: inset(0 0 -2px 100%); }
+    .nav-panel > li { transform: translateX(0.75rem); }
+    .nav-panel[data-open="true"] > li { transition-delay: calc((4 - var(--i)) * 45ms); }
+  }
+
+  /* Two lines that cross into an X while the menu is open. */
+  .burger-lines,
+  .burger-lines::before {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .burger-lines { transform: translateY(-3px); }
+  .burger-lines::before { content: ""; transform: translateY(6px); }
+  .burger[aria-expanded="true"] .burger-lines { transform: rotate(45deg); }
+  .burger[aria-expanded="true"] .burger-lines::before { transform: rotate(-90deg); }
+
+  .theme-toggle svg { transition: rotate 0.5s cubic-bezier(0.65, 0, 0.35, 1); }
+  .theme-toggle[aria-pressed="true"] svg { rotate: 180deg; }
 }
 
-/* The one animation on the site: help appearing under the choice someone just made. */
-@keyframes unfold {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: none; }
+@keyframes rise {
+  from { transform: translateY(108%); }
+  to   { transform: none; }
 }
-@utility unfold {
-  animation: unfold 0.28s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+
+/* Tight tracking for anything set at heading size or larger. */
+@utility tight {
+  letter-spacing: -0.035em;
+}
+
+/* A print: white border, tilted. */
+@utility photo-print {
+  @apply bg-white p-3 pb-12 shadow-[0_18px_40px_-18px_rgb(0_0_0/0.55)];
+  rotate: -3deg;
 }
 
 @media (prefers-reduced-motion: reduce) {
