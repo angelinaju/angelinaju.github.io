@@ -1,7 +1,9 @@
 import type { ReactNode } from 'react'
-import { Page, ProfilePhoto, StatusLine, Downloads, ROW, LEFT, MID } from '../components/Layout'
+import { Page, ProfilePhoto, StatusLine, Downloads, Note, ROW, LEFT, MID } from '../components/Layout'
 import { about } from '../content'
 import RevealText from '../components/RevealText'
+import Linked from '../components/Linked'
+import ToolIcon, { hasIcon } from '../components/ToolIcon'
 
 function Block({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -30,7 +32,9 @@ export default function AboutPage() {
           </div>
           <div className={`${MID} mt-8 space-y-4 text-lead md:mt-0`}>
             {about.bio.map((p) => (
-              <p key={p}>{p}</p>
+              <p key={p}>
+                <Linked text={p} />
+              </p>
             ))}
           </div>
         </div>
@@ -71,14 +75,35 @@ export default function AboutPage() {
             <div key={l.org}>
               <h3 className="tight text-h3">
                 {l.role}
-                <span className="block text-dim">{l.org}</span>
+                <span className="block text-dim">
+                  <Linked text={l.org} />
+                </span>
               </h3>
-              <p className="mt-2 text-small font-medium">{l.date}</p>
-              <ul className="mt-4 list-disc space-y-2 pl-5 marker:text-dim">
-                {l.points.map((p) => (
-                  <li key={p} className="pl-1">{p}</li>
-                ))}
-              </ul>
+              <p className="mt-2 text-small">
+                <span className="font-medium">{l.date}</span>
+                {l.note && <span className="text-dim">. {l.note}</span>}
+              </p>
+              {l.points.length > 0 ? (
+                <ul className="mt-4 list-disc space-y-2 pl-5 marker:text-dim">
+                  {l.points.map((p) => (
+                    <li key={p} className="pl-1">{p}</li>
+                  ))}
+                </ul>
+              ) : (
+                <Note>
+                  Add a sentence or two about this role: edit <code className="font-semibold">points</code> in
+                  src/content.ts.
+                </Note>
+              )}
+              {l.links && l.links.length > 0 && (
+                <p className="mt-4 flex flex-wrap gap-x-6 gap-y-1">
+                  {l.links.map((link) => (
+                    <a key={link.href} className="link font-medium" href={link.href}>
+                      {link.label}
+                    </a>
+                  ))}
+                </p>
+              )}
             </div>
           ))}
         </div>
@@ -86,12 +111,29 @@ export default function AboutPage() {
 
       <Block title="Toolkit">
         <dl className="space-y-5">
-          {about.skills.map(([k, v]) => (
-            <div key={k} className="grid gap-1 sm:grid-cols-[7rem_1fr] sm:gap-6">
-              <dt className="font-medium">{k}</dt>
-              <dd className="text-dim">{v}</dd>
-            </div>
-          ))}
+          {about.skills.map(([k, v]) => {
+            const items = v.split(', ')
+            return (
+              <div key={k} className="grid gap-1 sm:grid-cols-[7rem_1fr] sm:gap-6">
+                <dt className="font-medium">{k}</dt>
+                {/* Rows with logos become a list of tools; the rest stay a plain sentence. */}
+                {items.some(hasIcon) ? (
+                  <dd>
+                    <ul className="flex flex-wrap gap-x-5 gap-y-2 text-dim">
+                      {items.map((item) => (
+                        <li key={item} className="inline-flex items-center gap-1.5">
+                          <ToolIcon name={item} />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </dd>
+                ) : (
+                  <dd className="text-dim">{v}</dd>
+                )}
+              </div>
+            )
+          })}
         </dl>
       </Block>
     </Page>

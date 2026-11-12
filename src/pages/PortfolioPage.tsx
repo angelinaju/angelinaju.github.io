@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { Page, PageIntro, Note, IndexList, ROW, LEFT, MID } from '../components/Layout'
+import Linked from '../components/Linked'
 
 // Yellow note marking something you still need to add. Preview only. Delete each one once filled in.
 function Todo({ children }: { children: ReactNode }) {
@@ -15,7 +16,9 @@ function Facts({ items }: { items: Fact[] }) {
       {items.map(([k, v]) => (
         <div key={k}>
           <dt className="text-dim">{k}</dt>
-          <dd className="font-medium">{v}</dd>
+          <dd className="font-medium">
+            <Linked text={v} />
+          </dd>
         </div>
       ))}
     </dl>
@@ -337,7 +340,7 @@ export default function Portfolio() {
         >
           <h3>The problem</h3>
           <p>
-            PegasusAI comes out of Pegasus, a workflow management system that scientists use to run large
+            <a className="link" href="https://pegasus-ai.org/">PegasusAI</a> comes out of Pegasus, a workflow management system that scientists use to run large
             computational workflows. Our NSF-funded project is bringing AI assistance into it. Before putting an
             assistant in front of scientists and researchers, my PIs wanted to try the idea with students first: could
             we build an assistant that helps people work toward an answer, rather than just handing it to them?
@@ -371,13 +374,6 @@ export default function Portfolio() {
             always within reach. And because the button already knows which cell it belongs to, students never have to
             write a question or paste in their code: the context goes along automatically. Putting the response
             directly under the cell kept the student’s eyes on their own work instead of in a separate panel.
-          </p>
-          <p className="text-small text-dim">
-            An early prototype of the extension is on GitHub:{' '}
-            <a className="link" href="https://github.com/angelinaju/jupyterlab-extension-vscode">
-              jupyterlab-extension-vscode
-            </a>
-            . It isn’t the finished version deployed in the course.
           </p>
 
           <h3>Mapping the whole system</h3>

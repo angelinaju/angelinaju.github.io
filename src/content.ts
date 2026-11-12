@@ -1,13 +1,11 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// All of the site's words live in this file. Edit freely; layout code is elsewhere.
+// All of the site's words live in this file. 
 //
 // `summary` fields are for YOUR short description, in your own voice (1–3 sentences:
 // what the job was really about, and what you're proudest of). While a summary is
 // empty, a dashed reminder box shows in local preview only, never on the live site.
 // ─────────────────────────────────────────────────────────────────────────────
 
-// ── Shapes of the content below. TypeScript checks every entry against these, so a missing
-//    field or a typo in a key shows up as an error before the site builds.
 export interface Role {
   id: string
   org: string
@@ -50,7 +48,11 @@ export interface Leadership {
   role: string
   org: string
   date: string
+  // Shown after the dates, e.g. how long you've been a member.
+  note?: string
+  // Leave empty while you're still writing it; a reminder shows in local preview only.
   points: string[]
+  links?: { label: string; href: string }[]
 }
 
 
@@ -64,19 +66,29 @@ export const links: {
   email: 'aju@vols.utk.edu',
   linkedin: 'https://www.linkedin.com/in/angelinaju',
   github: 'https://github.com/angelinaju',
-  // Downloadable PDFs in /public. Phone number and location are removed from these copies.
-  // Set either one to null to hide its download link.
   cv: '/AngelinaJu_CV.pdf',
   resume: '/AngelinaJu_Resume.pdf',
 }
 
-// To show your photo: put a square image in /public (e.g. profile.jpg) and set this to '/profile.jpg'.
-export const photo: string | null = null
+// Your photo on the About page: an image in /public. Set to null to hide it.
+export const photo: string | null = '/headshot.jpg'
+
+// Groups you're part of. Wherever one of these names appears in an org, team, or "Where" line, or in
+// your bio, it becomes a link to the group's site. Longer names are matched first.
+export const groupLinks: Record<string, string> = {
+  'Global Computing Lab': 'https://globalcomputing.group/',
+  'EPIC Lab': 'https://epic.eecs.utk.edu/',
+  PegasusAI: 'https://pegasus-ai.org/',
+  'Systers: Women in EECS': 'https://www.systers.eecs.utk.edu/',
+  Systers: 'https://www.systers.eecs.utk.edu/',
+  'Society of Asian Scientists and Engineers (SASE)': 'https://saseutk.weebly.com/',
+  SASE: 'https://saseutk.weebly.com/',
+  'Korean Pop Dance Association (KPDA)': 'https://www.youtube.com/@utkpda',
+}
 
 export const status = 'Looking for full-time PM roles and HCI master’s programs (2027)'
 
 export const home: { statement: string; sub: string; selected: SelectedItem[] } = {
-  // The big headline. Change it to whatever sounds most like you.
   // \u00a0 is a space that never breaks, so phrases like "AI products" stay on one line.
   statement: 'I’m working toward AI\u00a0products that help\u00a0people do\u00a0more on their\u00a0own.',
   sub: 'Hi, I’m Angelina, a computer science senior at the University of Tennessee, graduating in May 2027. In my lab, I built the help button for PegasusAI, an assistant that helps students work toward an answer without leaving their notebook. Before that, I studied whether robot dogs could help older adults with dementia stay active. This summer, as a product management intern at St. Jude, I coordinated the user guide for ARIA Guide, a pediatric cancer care platform used by 1,750+ people in 116 countries.',
@@ -84,14 +96,14 @@ export const home: { statement: string; sub: string; selected: SelectedItem[] } 
   selected: [
     { title: 'Product intern at St. Jude', context: 'St. Jude Children’s Research Hospital', kind: 'Product', year: '2026', href: '/work/#st-jude' },
     { title: 'PegasusAI, an AI helper in JupyterLab', context: 'Global Computing Lab, UTK', kind: 'Research', year: '2025–', href: '/research/#pegasus' },
-    { title: 'Robot dogs for people with dementia', context: 'Zhao Robotics Lab, UTK', kind: 'Research', year: '2024–25', href: '/research/#robots' },
+    { title: 'Robot dogs for persons with dementia', context: 'Zhao Robotics Lab, UTK', kind: 'Research', year: '2024–25', href: '/research/#robots' },
     { title: 'A nonprofit client project', context: 'Hack4Impact UTK', kind: 'Product', year: '2026–', href: '/work/#hack4impact' },
-    { title: 'A chatbot for kids', context: 'Wiillow', kind: 'Product', year: '2025', href: '/work/#wiillow' },
+    { title: 'A social-emotional learning chatbot for kids', context: 'Wiillow', kind: 'Product', year: '2025', href: '/work/#wiillow' },
   ],
 }
 
 export const work: { lead: string; roles: Role[] } = {
-  lead: 'Two internships and a student org. Most of it has been product work on software for people who aren’t engineers.',
+  lead: 'Relevant product work',
   roles: [
     {
       id: 'st-jude',
@@ -125,9 +137,9 @@ export const work: { lead: string; roles: Role[] } = {
       summary: '',
       points: [
         'Leading the product side of a project for a nonprofit client: figuring out what they need and writing it up as requirements.',
-        'Managing the client relationship and coordinating a team of 9 student developers.',
+        'Managing the client relationship and coordinating a team of 6 student developers.',
       ],
-      tags: ['Requirements', 'Client work', 'Team of 9'],
+      tags: ['Requirements', 'Client work'],
     },
     {
       id: 'wiillow',
@@ -242,9 +254,9 @@ export const about: {
 } = {
   // Replace with your own words whenever you're ready.
   bio: [
-    'I’m a senior studying computer science at the University of Tennessee, and I graduate in May 2027.',
+    'I’m a senior studying computer science at the University of Tennessee, and I’m graduating in May 2027.',
     'I’m looking for a full-time product management job. I’m also looking at HCI master’s programs, mainly ones doing research on how people interact with AI.',
-    'Outside of class, I’m vice president of Systers and I plan SASE’s trip to its national convention each year.',
+    'Outside of class, I enjoy dancing, leading several student orgs, and planning trips to conferences for work and for fun!',
   ],
   education: {
     school: 'University of Tennessee, Knoxville',
@@ -266,7 +278,6 @@ export const about: {
   honors: [
     ['SWE Deloitte Scholarship', '2025, 2026'],
     ['Tau Beta Pi Engineering Honor Society', '2026'],
-    ['Tickle College of Engineering Differential Fee Scholarship', '2026'],
     ['Faculty Research Assistants Funding (FRAF)', '2024'],
   ],
   leadership: [
@@ -288,11 +299,26 @@ export const about: {
         'Raised $35,000+ by working with students, faculty, department heads, and sponsors.',
       ],
     },
+    {
+      role: 'Vice President',
+      org: 'Korean Pop Dance Association (KPDA)',
+      date: 'Aug 2025 – now',
+      note: 'Member since Nov 2023',
+      points: [
+          'Manage a leadership team of 15 people for a club of 60+ active dancers, including events, fundraising, dance leads, and media',
+          'Oversee practice scheduling, finances, travel, media posting schedules, professional communications with other organizations, and club presence on campus.',
+      ],
+      links: [
+        { label: 'Instagram', href: 'https://www.instagram.com/kpda.utk/' },
+        { label: 'YouTube', href: 'https://www.youtube.com/@utkpda' },
+      ],
+    },
   ],
   skills: [
-    ['Product', 'Agile/Scrum, sprint facilitation, roadmapping, user research, MVP scoping, requirements, prioritization, A/B testing'],
-    ['Tools', 'Azure DevOps, Jira, Trello, Git, Docker, JupyterLab, Microsoft 365'],
-    ['Code', 'Python, TypeScript, React, TailwindCSS, FastAPI, SQL, C/C++, PyTorch, ROS'],
+    ['Product', 'Agile/Scrum, sprint facilitation, roadmapping, user research, MVP scoping, requirements documentation, feature prioritization, stakeholder management, A/B testing'],
+    ['Tools', 'Azure DevOps, Jira, Trello, Git, Docker, VS Code, JupyterLab, Microsoft 365'],
+    ['Code', 'Python, TypeScript, C/C++, SQL (PostgreSQL), HTML/CSS, TailwindCSS, React, FastAPI, Linux, ROS'],
+    ['Libraries', 'Pandas, NumPy, PyTorch, PyBullet, Gym'],
     ['Languages', 'English (native), Mandarin (conversational)'],
   ],
 }
