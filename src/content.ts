@@ -73,12 +73,13 @@ export const links: {
 // To show your photo: put a square image in /public (e.g. profile.jpg) and set this to '/profile.jpg'.
 export const photo: string | null = null
 
-export const status = 'Looking for full-time PM roles (2027)'
+export const status = 'Looking for full-time PM roles and HCI master’s programs (2027)'
 
 export const home: { statement: string; sub: string; selected: SelectedItem[] } = {
   // The big headline. Change it to whatever sounds most like you.
-  statement: 'I work on AI tools, and on the people who have to use them.',
-  sub: 'Hi, I’m Angelina, a computer science senior at the University of Tennessee. This summer I was a product management intern at St. Jude. During the school year I work in a lab on PegasusAI, an AI assistant for a data engineering class. I graduate in May 2027.',
+  // \u00a0 is a space that never breaks, so phrases like "AI products" stay on one line.
+  statement: 'I’m working toward AI\u00a0products that help\u00a0people do\u00a0more on their\u00a0own.',
+  sub: 'Hi, I’m Angelina, a computer science senior at the University of Tennessee, graduating in May 2027. In my lab, I built the help button for PegasusAI, an assistant that helps students work toward an answer without leaving their notebook. Before that, I studied whether robot dogs could help older adults with dementia stay active. This summer, as a product management intern at St. Jude, I coordinated the user guide for ARIA Guide, a pediatric cancer care platform used by 1,750+ people in 116 countries.',
   // Rows in the "Selected work" list on the homepage.
   selected: [
     { title: 'Product intern at St. Jude', context: 'St. Jude Children’s Research Hospital', kind: 'Product', year: '2026', href: '/work/#st-jude' },
@@ -103,7 +104,7 @@ export const work: { lead: string; roles: Role[] } = {
       points: [
         'Evaluated AI tools that work with Azure DevOps to make scrum ceremonies take less time.',
         'Coordinated the UI/UX, RAG, and Microsoft Teams integration workstreams for an internal assistant, so staff could use it inside Teams.',
-        'Coordinated the user guide for ARIA Guide, a pediatric oncology knowledge platform used by 1,500+ healthcare providers in low- and middle-income countries.',
+        'Coordinated the user guide for ARIA Guide, a pediatric oncology platform built for hospitals in low- and middle-income countries and used by 1,750+ people in 116 countries.',
         'Was the go-between for developers and stakeholders, turning requests into clear technical direction.',
         'Ran daily standups, sprint planning, backlog refinement, and retros for several projects.',
       ],
