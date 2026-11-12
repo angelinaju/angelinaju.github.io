@@ -4,7 +4,7 @@ import { work } from '../content'
 export default function WorkPage() {
   return (
     <Page current="work">
-      <PageIntro title="Internships and student roles" lead={work.lead} />
+      <PageIntro title="Internships and student roles" lead={work.lead} count={work.roles.length} />
       {work.roles.map((r) => (
         <RoleBlock key={r.id} r={r} />
       ))}

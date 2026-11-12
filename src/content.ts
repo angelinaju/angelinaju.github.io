@@ -8,8 +8,6 @@
 
 // ── Shapes of the content below. TypeScript checks every entry against these, so a missing
 //    field or a typo in a key shows up as an error before the site builds.
-export type LinkPair = [label: string, href: string]
-
 export interface Role {
   id: string
   org: string
@@ -21,13 +19,6 @@ export interface Role {
   points: string[]
   tags?: string[]
   links?: { label: string; href: string }[]
-}
-
-export interface Path {
-  id: string
-  label: string
-  help: string
-  links: LinkPair[]
 }
 
 export interface SelectedItem {
@@ -84,40 +75,10 @@ export const photo: string | null = null
 
 export const status = 'Looking for full-time PM roles (2027)'
 
-export const home: { statement: string; sub: string; paths: Path[]; selected: SelectedItem[] } = {
+export const home: { statement: string; sub: string; selected: SelectedItem[] } = {
   // The big headline. Change it to whatever sounds most like you.
   statement: 'I work on AI tools, and on the people who have to use them.',
   sub: 'Hi, I’m Angelina, a computer science senior at the University of Tennessee. This summer I was a product management intern at St. Jude. During the school year I work in a lab on PegasusAI, an AI assistant for a data engineering class. I graduate in May 2027.',
-  // The "What brings you here?" picker. Each choice shows its own short guide to the site.
-  paths: [
-    {
-      id: 'hiring',
-      label: 'I’m hiring for a product role',
-      help: 'I’m looking for full-time product management roles starting in 2027. Start with my internship at St. Jude, where I ran scrum ceremonies for several projects and coordinated the user guide for a platform used by 1,500+ providers. Hack4Impact and Wiillow are on the same page.',
-      links: [
-        ['See my work', '/work/'],
-        ['Download resume (PDF)', '/AngelinaJu_Resume.pdf'],
-      ],
-    },
-    {
-      id: 'grad',
-      label: 'I’m reviewing a grad school application',
-      help: 'My research is on how people work with AI: an assistant that helps students without leaving their notebook, and whether robot dogs could help older adults with dementia stay active. My CV has the full list of posters and coursework.',
-      links: [
-        ['See my research', '/research/'],
-        ['Download CV (PDF)', '/AngelinaJu_CV.pdf'],
-      ],
-    },
-    {
-      id: 'browsing',
-      label: 'I’m just looking around',
-      help: 'Projects has class and team work, like evolving bridge designs with a genetic algorithm. About has my education, leadership, and the tools I use.',
-      links: [
-        ['See projects', '/projects/'],
-        ['About me', '/about/'],
-      ],
-    },
-  ],
   // Rows in the "Selected work" list on the homepage.
   selected: [
     { title: 'Product intern at St. Jude', context: 'St. Jude Children’s Research Hospital', kind: 'Product', year: '2026', href: '/work/#st-jude' },
@@ -262,7 +223,7 @@ export const projects: { lead: string; list: Project[] } = {
       name: 'Fitness tracker',
       date: '2025',
       stack: 'React · FastAPI · PostgreSQL',
-      metric: '5 devs · 3 mo',
+      metric: '5 devs, 3 mo',
       metricLabel: 'team and timeline',
       blurb:
         'A team project with a dashboard plus nutrition, exercise, and goal tracking. I planned the features and split the work across five developers so we finished on time.',

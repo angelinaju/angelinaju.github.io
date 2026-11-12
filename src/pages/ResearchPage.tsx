@@ -1,23 +1,26 @@
-import { Page, PageIntro, RoleBlock, GUTTER } from '../components/Layout'
+import { Page, PageIntro, RoleBlock, ROW, LEFT, MID, RIGHT } from '../components/Layout'
 import { research } from '../content'
 
 export default function ResearchPage() {
   return (
     <Page current="research">
-      <PageIntro title="Two labs at UTK" lead={research.lead} />
+      <PageIntro title="Two labs at UTK" lead={research.lead} count={research.roles.length} />
       {research.roles.map((r) => (
         <RoleBlock key={r.id} r={r} />
       ))}
 
-      <section className={`border-t border-rule py-12 sm:py-14 ${GUTTER}`}>
-        <h2 className="mb-6 text-h3 font-bold tracking-tight md:mb-0">Posters</h2>
-        <ul className="space-y-8">
+      <section aria-labelledby="posters" className="border-t border-fg/25 pt-5">
+        <h2 id="posters" className="mb-8 text-small font-medium">
+          Posters<sup className="ml-px text-[0.6em] font-normal">{research.posters.length}</sup>
+        </h2>
+        <ul className="space-y-10">
           {research.posters.map((p) => (
-            <li key={p.title}>
-              <p className="text-lead font-bold">{p.title}</p>
-              <p className="mt-1 text-muted">
-                {p.venue}, {p.date}
-                {p.note && <>. {p.note}</>}
+            <li key={p.title} className={ROW}>
+              <p className={`${LEFT} mb-2 text-small font-medium md:mb-0 md:pt-1`}>{p.note ?? ''}</p>
+              <p className={`${MID} tight text-h3`}>{p.title}</p>
+              <p className={`${RIGHT} mt-2 text-dim md:mt-0`}>
+                {p.venue}
+                <span className="block">({p.date})</span>
               </p>
             </li>
           ))}
