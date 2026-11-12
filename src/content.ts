@@ -50,7 +50,11 @@ export interface Leadership {
   role: string
   org: string
   date: string
+  // Shown after the dates, e.g. how long you've been a member.
+  note?: string
+  // Leave empty while you're still writing it; a reminder shows in local preview only.
   points: string[]
+  links?: { label: string; href: string }[]
 }
 
 
@@ -70,8 +74,21 @@ export const links: {
   resume: '/AngelinaJu_Resume.pdf',
 }
 
-// To show your photo: put a square image in /public (e.g. profile.jpg) and set this to '/profile.jpg'.
-export const photo: string | null = null
+// Your photo on the About page: an image in /public. Set to null to hide it.
+export const photo: string | null = '/headshot.jpg'
+
+// Groups you're part of. Wherever one of these names appears in an org, team, or "Where" line, or in
+// your bio, it becomes a link to the group's site. Longer names are matched first.
+export const groupLinks: Record<string, string> = {
+  'Global Computing Lab': 'https://globalcomputing.group/',
+  'EPIC Lab': 'https://epic.eecs.utk.edu/',
+  PegasusAI: 'https://pegasus-ai.org/',
+  'Systers: Women in EECS': 'https://www.systers.eecs.utk.edu/',
+  Systers: 'https://www.systers.eecs.utk.edu/',
+  'Society of Asian Scientists and Engineers (SASE)': 'https://saseutk.weebly.com/',
+  SASE: 'https://saseutk.weebly.com/',
+  'Korean Pop Dance Association (KPDA)': 'https://www.youtube.com/@utkpda',
+}
 
 export const status = 'Looking for full-time PM roles and HCI master’s programs (2027)'
 
@@ -244,7 +261,7 @@ export const about: {
   bio: [
     'I’m a senior studying computer science at the University of Tennessee, and I graduate in May 2027.',
     'I’m looking for a full-time product management job. I’m also looking at HCI master’s programs, mainly ones doing research on how people interact with AI.',
-    'Outside of class, I’m vice president of Systers and I plan SASE’s trip to its national convention each year.',
+    'Outside of class, I’m vice president of Systers and of the Korean Pop Dance Association (KPDA), and I plan SASE’s trip to its national convention each year.',
   ],
   education: {
     school: 'University of Tennessee, Knoxville',
@@ -266,7 +283,6 @@ export const about: {
   honors: [
     ['SWE Deloitte Scholarship', '2025, 2026'],
     ['Tau Beta Pi Engineering Honor Society', '2026'],
-    ['Tickle College of Engineering Differential Fee Scholarship', '2026'],
     ['Faculty Research Assistants Funding (FRAF)', '2024'],
   ],
   leadership: [
@@ -288,11 +304,23 @@ export const about: {
         'Raised $35,000+ by working with students, faculty, department heads, and sponsors.',
       ],
     },
+    {
+      role: 'Vice President',
+      org: 'Korean Pop Dance Association (KPDA)',
+      date: 'Aug 2025 – now',
+      note: 'Member since Nov 2023',
+      points: [],
+      links: [
+        { label: 'Instagram', href: 'https://www.instagram.com/kpda.utk/' },
+        { label: 'YouTube', href: 'https://www.youtube.com/@utkpda' },
+      ],
+    },
   ],
   skills: [
-    ['Product', 'Agile/Scrum, sprint facilitation, roadmapping, user research, MVP scoping, requirements, prioritization, A/B testing'],
-    ['Tools', 'Azure DevOps, Jira, Trello, Git, Docker, JupyterLab, Microsoft 365'],
-    ['Code', 'Python, TypeScript, React, TailwindCSS, FastAPI, SQL, C/C++, PyTorch, ROS'],
+    ['Product', 'Agile/Scrum, sprint facilitation, roadmapping, user research, MVP scoping, requirements documentation, feature prioritization, stakeholder management, A/B testing'],
+    ['Tools', 'Azure DevOps, Jira, Trello, Git, Docker, VS Code, JupyterLab, Microsoft 365'],
+    ['Code', 'Python, TypeScript, C/C++, SQL (PostgreSQL), HTML/CSS, TailwindCSS, React, FastAPI, Linux, ROS'],
+    ['Libraries', 'Pandas, NumPy, PyTorch, PyBullet, Gym'],
     ['Languages', 'English (native), Mandarin (conversational)'],
   ],
 }

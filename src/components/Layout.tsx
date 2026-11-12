@@ -3,6 +3,7 @@ import { links, status, photo, type Role } from '../content'
 import RevealText from './RevealText'
 import ThemeToggle from './ThemeToggle'
 import NavMenu from './NavMenu'
+import Linked from './Linked'
 
 // Which nav item is marked as the current page. 'home' marks none.
 export type PageKey = 'home' | 'case-studies' | 'work' | 'research' | 'projects' | 'about'
@@ -135,8 +136,12 @@ export function RoleBlock({ r }: { r: Role }) {
         <h2 className="tight text-h2">
           {r.role}
           <span className="block text-dim">
-            {r.org}
-            {r.team && <>, {r.team}</>}
+            <Linked text={r.org} />
+            {r.team && (
+              <>
+                , <Linked text={r.team} />
+              </>
+            )}
           </span>
         </h2>
         <div className="mt-8">
@@ -204,7 +209,7 @@ export function ProfilePhoto({ className = '' }: { className?: string }) {
   if (photo) {
     return (
       <figure className={`photo-print ${className}`}>
-        <img src={photo} alt="Angelina Ju" className="aspect-[4/5] w-full object-cover" />
+        <img src={photo} alt="Angelina Ju in Knoxville, with the Sunsphere behind her" className="aspect-[4/5] w-full object-cover" />
       </figure>
     )
   }
