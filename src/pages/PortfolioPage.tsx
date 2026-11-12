@@ -47,6 +47,36 @@ function CaseStudy({ id, title, summary, facts, children }: CaseStudyProps) {
   )
 }
 
+// What ARIA Guide users said at conferences, and how the user guides respond. From the final
+// internship presentation (Aug 2026).
+const ariaFeedback: [heard: string, response: string][] = [
+  ['Tab names like “Care Book” and “Care Tools” were confusing', 'Clearer labels, plus tooltips and a video for first-time users'],
+  ['Sign up wasn’t easy to find on the home page', 'A more visible sign up and sign in button'],
+  ['Acronyms and unusual terms were hard to follow', 'Fewer unusual acronyms, and a glossary'],
+  ['Pages didn’t explain how to use what was on them', 'Clear prompts and context on each page'],
+]
+
+function FeedbackTable({ rows }: { rows: [string, string][] }) {
+  return (
+    <table className="my-8 w-full border-collapse text-left">
+      <thead>
+        <tr className="text-small text-dim">
+          <th scope="col" className="w-1/2 pr-6 pb-2 font-normal">What users told us</th>
+          <th scope="col" className="w-1/2 pb-2 font-normal">What we recommended</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map(([heard, response]) => (
+          <tr key={heard} className="border-t border-fg/25 align-top">
+            <td className="py-3 pr-6">{heard}</td>
+            <td className="py-3 font-medium">{response}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
 // Simplified PegasusAI request flow. `mine` marks the steps Angelina built.
 interface FlowGroup {
   where: string
@@ -188,36 +218,110 @@ export default function Portfolio() {
         <CaseStudy
           id="aria-guide"
           title="ARIA Guide: user guides for a global pediatric oncology platform"
-          summary="ARIA Guide is St. Jude’s pediatric oncology knowledge platform, used by 1,500+ healthcare providers in low- and middle-income countries. As a product management intern, I coordinated its user guide: the materials that help providers register, navigate the portal, and apply the guidelines in practice."
+          summary="ARIA Guide is St. Jude Global’s treatment guidance platform for childhood cancer, adapted to what hospitals in low- and middle-income countries actually have on hand. As scrum master, I ran the project that added user guides to it: a video series and quick-reference PDFs that answer the questions users kept asking."
           facts={[
             ['Role', 'Product Management Intern'],
             ['When', 'Jun – Aug 2026'],
             ['Where', 'St. Jude Children’s Research Hospital'],
-            ['My part', 'Coordinated the user guide'],
+            ['My part', 'Scrum master for the user guides'],
           ]}
         >
           <h3>The problem</h3>
           <p>
-            A clinical guidelines platform only helps patients if the providers using it can find their way around it.
-            ARIA Guide’s users are busy clinicians across many countries and health systems, so the guide had to work
-            for people with very different setups and experience with the platform.
+            When ARIA Guide was first built in 2019, there were no childhood cancer treatment guides adapted to the
+            resources of hospitals in low- and middle-income countries. It now covers the whole path of care, from
+            diagnostic workup and risk staging to treatment roadmaps and supportive care, and is used by 1,750+ people
+            in 116 countries.
           </p>
-          <Todo>what made this hard, e.g. language, connectivity, varying familiarity with the platform.</Todo>
-
-          <h3>What I did</h3>
           <p>
-            I coordinated the user guide project. The materials are now public on the{' '}
-            <a className="link" href="https://aria.stjude.org/user-guides">ARIA Guide user guides page</a>, covering
-            registration, navigating the portal, the ARIA Guide’s terminology, troubleshooting, the admin app, and
-            applying disease-based guidance and clinical practice recommendations.
+            But finding your way around it wasn’t easy. When the team demoed ARIA Guide at international pediatric
+            oncology conferences, the same feedback kept coming back:
           </p>
-          <Todo>
-            which pieces you owned or shaped (videos, quick reference guides, the toolkit), who you worked with, and a
-            decision you made about structure or scope.
-          </Todo>
+          <FeedbackTable rows={ariaFeedback} />
+          <p>
+            The user guides were built to answer that feedback directly, so clinicians could learn the platform on
+            their own.
+          </p>
+
+          <h3>How the project ran</h3>
+          <p>I was the scrum master, so my job was keeping the work moving and the right people talking. The project went through these steps:</p>
+          <ol className="list-decimal space-y-1 pl-6 marker:text-dim">
+            <li>Wrote up the requirements and turned them into user stories in Azure DevOps</li>
+            <li>Reviewed mockups with the ARIA Guide team to agree on how the guides should look</li>
+            <li>Handed the UI requirements to the frontend developer</li>
+            <li>Collected videos and PDFs from subject-matter experts and an outside video vendor</li>
+            <li>Worked out where the videos and PDFs would live with St. Jude’s communications team and our developers</li>
+            <li>Built and shipped it in sprints, adjusting as we went</li>
+          </ol>
+          <p>
+            Each sprint, I ran the daily standups, backlog refinement (reviewing new user stories and getting effort
+            estimates), and sprint planning and retrospectives. Between ceremonies I wrote documentation and user
+            stories, sat in on meetings with the developers and ARIA Guide’s clinical experts, and tested the work
+            before release.
+          </p>
+
+          <h3>A decision about bandwidth</h3>
+          <p>
+            Most ARIA Guide users are in places where internet connections can be slow, so where the videos lived
+            mattered as much as what was in them. Rather than serving video files straight from the site, we sent them
+            through St. Jude’s communications team to a video hosting service built for fast, low-latency streaming.
+            The site keeps each video’s link in a data file, and the guides page groups the videos by topic.
+          </p>
+
+          <h3>What shipped</h3>
+          <p>
+            The guides are public on the{' '}
+            <a className="link" href="https://aria.stjude.org/user-guides">ARIA Guide user guides page</a>:
+          </p>
+          <ul className="list-disc space-y-2 pl-5 marker:text-dim">
+            <li>
+              <span className="font-medium">A video series</span> covering getting started, registering and signing in,
+              navigation, terminology, applying disease guidelines and clinical practice recommendations,
+              troubleshooting, and the admin app.
+            </li>
+            <li>
+              <span className="font-medium">Quick-reference PDFs</span> that repeat the videos in a form you can print or
+              keep open: a quick start, registration, where to find things, a glossary, the admin app, navigating
+              adapted guidelines, and the care tools.
+            </li>
+            <li>
+              <span className="font-medium">Links to Cure4Kids classes</span> on applying the guidelines in practice. An
+              implementation toolkit for hospitals is planned next.
+            </li>
+          </ul>
+          <Todo>any early numbers since launch, e.g. video views or fewer sign-up questions to support.</Todo>
 
           <h3>What I learned</h3>
-          <Todo>a takeaway about writing for non-technical, international users.</Todo>
+          <ul className="space-y-6">
+            <li>
+              <p className="font-medium">Running scrum myself, not just reading about it.</p>
+              <p className="mt-1 text-dim">
+                Leading standups, backlog refinement, sprint planning, and retros every week gave me hands-on practice
+                with the process I want to use as a PM.
+              </p>
+            </li>
+            <li>
+              <p className="font-medium">A lot of the job is knowing which conversations matter.</p>
+              <p className="mt-1 text-dim">
+                The user guides touched clinical experts, developers, a video vendor, and a communications team. I
+                learned to spot which discussions mattered most and to bring in the people who knew the field.
+              </p>
+            </li>
+            <li>
+              <p className="font-medium">Helping build something is different from coding it.</p>
+              <p className="mt-1 text-dim">
+                I wasn’t writing the code. My part was documenting requirements, working through storage questions with
+                the developers, and keeping the work moving in Azure DevOps.
+              </p>
+            </li>
+            <li>
+              <p className="font-medium">It was a team with one mission.</p>
+              <p className="mt-1 text-dim">
+                It was great to work with such a motivated group, all working toward the same goal: improving survival
+                for children with cancer around the world.
+              </p>
+            </li>
+          </ul>
         </CaseStudy>
 
         <CaseStudy

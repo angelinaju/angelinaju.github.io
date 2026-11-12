@@ -162,8 +162,7 @@
     animation-play-state: paused;
   }
 }
-/* Header menu (NavMenu.tsx). Phones: links drop down. sm and up: links open leftward from the button,
-   the nearest link first. */
+/* Header menu (NavMenu.tsx). Phones only: the links drop down from the menu button. */
 @layer components {
   .nav-panel {
     visibility: hidden;
@@ -185,10 +184,16 @@
     transform: none;
     transition-delay: calc(var(--i) * 35ms);
   }
+  /* sm and up: the links are always shown in the header, so none of the above applies. */
   @media (width >= 40rem) {
-    .nav-panel { clip-path: inset(0 0 -2px 100%); }
-    .nav-panel > li { transform: translateX(0.75rem); }
-    .nav-panel[data-open="true"] > li { transition-delay: calc((4 - var(--i)) * 45ms); }
+    .nav-panel,
+    .nav-panel > li {
+      visibility: visible;
+      clip-path: none;
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
   }
 
   /* Two lines that cross into an X while the menu is open. */
